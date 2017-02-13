@@ -17,7 +17,8 @@ alcohol <- sasxport.get('./data/ALQ_H.XPT')
 nhanes <- left_join(alcohol, demographics, by='seqn')
 
 # Take the sum of the weighting column `wtint2yr` - what is this number?
-
+sum(demographics$wtint2yr)
+# The number is 311204216, and is the number of the entire population (US pop)
 
 # Create a survey design that indicates the id, strata, and weights
 
