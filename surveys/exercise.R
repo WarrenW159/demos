@@ -6,12 +6,13 @@ library(dplyr)
 library(ggplot2)
 data(api)
 
-# How many schools are in the full dataset?
 
+# How many schools are in the full dataset?
+# 6194 schools
 
 # How many districts are there in the dataset (dnum)?
-
-
+length(unique(apipop$dnum))
+# 757
 
 
 ###############################################################
@@ -21,22 +22,37 @@ data(api)
 
 
 # Use the `table` function to see how many schools are selected by school type (stype)
-
+table(apistrat$stype)
+# E = 100
+# M = 50
+# H = 50
 
 # How does this compare the to breakdown of the fractions of school type in the full dataset?
-
+table(apipop$stype)
+# E = 4421
+# M = 1018
+# H = 755
 
 # Given that we sample by strata, what are the *probability weights* for each observation?
-
+probability.weights <- table(apipop$stype)/table(apistrat$stype)
+# E = 44.21
+# M = 15.10
+# H = 20.36
 
 # What is the sum of probability weights column in the dataset?
-
+sum(apistrat$pw)
+# sum = 6194
 
 # Use the `table` function to see how probability weight varies by stype
-
+table(apistrat$stype, apistrat$pw)
 
 # Specify a stratified design 
 # We need to know stype, pw, AND fpc (# of schools of that type in pop)
+stratified.design <- svydesign(id=~1,
+                               strata=~stype,
+                               weights=~pw,
+                               fpc=~fpc,
+                               data=apistrat)
 
 
 # Specify a design without the finite population correction
